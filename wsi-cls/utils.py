@@ -4,6 +4,7 @@ import os, sys
 import numpy as np
 import deepdish as dd
 
+
 def getfolderlist(Imagefolder):
     folder_list = []
     folder_names = []

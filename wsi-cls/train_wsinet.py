@@ -33,10 +33,6 @@ def set_args():
 
 
 if  __name__ == '__main__':
-    # np.random.seed(1234)
-    # torch.manual_seed(1234)
-    # torch.cuda.manual_seed(1234)
-
     args = set_args()
     # Model preparetion
     net = WsiNet(class_num=args.class_num, in_channels=args.input_fea_num, mode=args.mode)
