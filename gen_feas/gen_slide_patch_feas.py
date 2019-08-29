@@ -95,5 +95,6 @@ if __name__ == '__main__':
     ft_model.eval()
 
     print("Prediction model is: {}".format(args.model_name))
-    # Predict All Patches
+
+    # predict all patches
     predit_all_feas(model=ft_model, args=args)
