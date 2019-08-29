@@ -1,5 +1,6 @@
 from visdom import Visdom
 
+
 def create_vis_plot(viz, _xlabel, _ylabel, _title, _legend):
     return viz.line(
         X=torch.zeros((1,)).cpu(),

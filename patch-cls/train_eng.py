@@ -10,8 +10,7 @@ import torch.nn as nn
 from torch.autograd import Variable
 from sklearn import metrics
 import numpy as np
-# import torch.nn.functional as F
-from data_ld import train_loader, val_loader, ClassNUM
+from patchloader import train_loader, val_loader
 
 
 def adjust_learning_rate(optimizer, epoch, args):
@@ -22,19 +21,27 @@ def adjust_learning_rate(optimizer, epoch, args):
 
 def train_thyroid(args):
     # construct model
-    if args.model_name == "InceptionV3":
+    if args.model_name == "inceptionv3":
         model = models.inception_v3(pretrained=True)
-        num_ftrs = model.fc.in_features
-        model.fc = nn.Linear(num_ftrs, ClassNUM)
+        model.fc = nn.Linear(2048, args.class_num)
+    elif args.model_name == "resnet50":
+        model = models.resnet50(pretrained=True)
+        model.fc = nn.Linear(512*4, args.class_num)
+    elif args.model_name == "vgg16bn":
+        model = models.vgg16_bn(pretrained=True)
+        model.classifier[-1] = nn.Linear(4096, args.class_num)
+    else:
+        raise AssertionError("unknown model name")
+
 
     model.cuda()
     # optimizer & loss
-    optimizer = optim.SGD(model.parameters(), weight_decay=args.weight_decay,
-                          lr=args.lr, momentum=0.9, nesterov=True)
+    optimizer = optim.SGD(model.parameters(), lr=args.lr,
+                          weight_decay=5.0e-4, momentum=0.9, nesterov=True)
     criterion =nn.CrossEntropyLoss()
     # dataloader
-    train_thyroid_loader = train_loader()
-    val_thyroid_loader = val_loader()
+    train_thyroid_loader = train_loader(args.batch_size)
+    val_thyroid_loader = val_loader(args.batch_size)
 
     # folder for model saving
     model_dir = os.path.join(args.model_dir, args.model_name, args.session)
@@ -69,7 +76,10 @@ def train_model(train_loader, model, criterion, optimizer, epoch, args):
         inputs, targets = inputs.cuda(), targets.cuda()
         inputs, targets = Variable(inputs), Variable(targets)
         optimizer.zero_grad()
-        outputs, _ = model(inputs)
+        if args.model_name == "inceptionv3":
+            outputs, _ = model(inputs)
+        else:
+            outputs = model(inputs)
         loss = criterion(outputs, targets)
         loss.backward()
         optimizer.step()

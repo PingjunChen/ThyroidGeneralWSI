@@ -13,7 +13,7 @@ def set_args():
     parser.add_argument('--seed',            type=int,   default=1234)
     parser.add_argument('--model_dir',       type=str,   default="../data/Models/PatchModels")
     parser.add_argument('--data_name',       type=str,   default="thyroid")
-    parser.add_argument('--model_name',      type=str,   default="InceptionV3")
+    parser.add_argument('--model_name',      type=str,   default="inceptionv3")
     parser.add_argument('--model_path',      type=str,   default="thyroid11-0.9731.pth")
 
     args = parser.parse_args()
