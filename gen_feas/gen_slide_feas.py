@@ -86,6 +86,7 @@ def set_args():
 if __name__ == '__main__':
     args = set_args()
     os.environ["CUDA_VISIBLE_DEVICES"] = str(args.device_id)
+
     # load patch model
     args.model_path = os.path.join(args.model_dir, args.model_type, args.model_session, args.model_name)
     if not os.path.exists(args.model_path):
@@ -94,7 +95,6 @@ if __name__ == '__main__':
     ft_model.cuda()
     ft_model.eval()
 
-    print("Prediction model is: {}".format(args.model_name))
-
     # predict all patches
+    print("Prediction model is: {}".format(args.model_name))
     predit_all_feas(model=ft_model, args=args)
