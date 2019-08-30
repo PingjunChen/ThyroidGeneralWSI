@@ -42,12 +42,12 @@ def extract_deep_feas(model, inputs, model_name):
     model.eval()
     if "inceptionv3" == model_name:
         if model.transform_input:
-            x_ch0 = torch.unsqueeze(x[:, 0], 1) * (0.229 / 0.5) + (0.485 - 0.5) / 0.5
-            x_ch1 = torch.unsqueeze(x[:, 1], 1) * (0.224 / 0.5) + (0.456 - 0.5) / 0.5
-            x_ch2 = torch.unsqueeze(x[:, 2], 1) * (0.225 / 0.5) + (0.406 - 0.5) / 0.5
-            x = torch.cat((x_ch0, x_ch1, x_ch2), 1)        
+            x_ch0 = torch.unsqueeze(inputs[:, 0], 1) * (0.229 / 0.5) + (0.485 - 0.5) / 0.5
+            x_ch1 = torch.unsqueeze(inputs[:, 1], 1) * (0.224 / 0.5) + (0.456 - 0.5) / 0.5
+            x_ch2 = torch.unsqueeze(inputs[:, 2], 1) * (0.225 / 0.5) + (0.406 - 0.5) / 0.5
+            x = torch.cat((x_ch0, x_ch1, x_ch2), 1)
         # N x 3 x 299 x 299
-        x = model.Conv2d_1a_3x3(inputs)
+        x = model.Conv2d_1a_3x3(x)
         # N x 32 x 149 x 149
         x = model.Conv2d_2a_3x3(x)
         # N x 32 x 147 x 147
@@ -91,14 +91,14 @@ def extract_deep_feas(model, inputs, model_name):
         logit = model.fc(fea)
         prob = F.softmax(logit, dim=-1)
     elif "vgg16bn" == model_name:
-        x = model.features(x)
+        x = model.features(inputs)
         x = model.avgpool(x)
         x = torch.flatten(x, 1)
         fea = model.classifier[:4](x)
         logit = model.classifier[4:](fea)
         prob = F.softmax(logit, dim=-1)
     elif "resnet50" == model_name:
-        x = model.conv1(x)
+        x = model.conv1(inputs)
         x = model.bn1(x)
         x = model.relu(x)
         x = model.maxpool(x)
