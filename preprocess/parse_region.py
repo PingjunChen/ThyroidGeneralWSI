@@ -6,6 +6,7 @@ import openslide
 import deepdish as dd
 from pydaily import format
 
+
 def save_wsi_annotation(slide_path, json_path, h5_path, slide_level):
     slide_head = openslide.OpenSlide(slide_path)
     region_dict = {}
@@ -42,10 +43,13 @@ def save_wsi_annotation(slide_path, json_path, h5_path, slide_level):
         region_dict[region_name] = cur_region
     dd.io.save(h5_path, region_dict)
 
-def parse_all_annotations(data_dir, cur_set, cur_cat, ls):
+
+def parse_all_annotations(data_dir, cur_set, cur_cat, slide_level):
     slides_dir = os.path.join(data_dir, "Slides", cur_set, cur_cat)
     annotations_dir = os.path.join(data_dir, "Annotations", cur_set, cur_cat)
     regionH5_save_dir = os.path.join(data_dir, "Regions", cur_set, cur_cat)
+    if not os.path.exists(regionH5_save_dir):
+        os.makedirs(regionH5_save_dir)
 
     slides_list = [ele for ele in os.listdir(slides_dir) if "tiff" in ele]
     for ele in slides_list:
@@ -63,9 +67,9 @@ def parse_all_annotations(data_dir, cur_set, cur_cat, ls):
 if __name__ == '__main__':
     np.random.seed(3333)
 
-    data_dir = "/media/pingjun/Pingjun350/ThyroidData/TrainVal"
+    data_dir = "../data/TrainVal"
     categories = ["1Benign", "2Uncertain", "3Malignant"]
-    which_set = ["Train", "Val"]
+    which_set = ["train", "val"]
 
     for cur_set in which_set:
         print("Current set is: {}".format(cur_set))

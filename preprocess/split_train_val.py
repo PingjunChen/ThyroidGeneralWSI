@@ -4,6 +4,8 @@ import os, sys
 from random import shuffle
 import shutil
 
+
+# Further-divice train to Train/Val set
 def split_valset(patch_dir, ratio):
     train_dir = os.path.join(patch_dir, "Train")
     cats_list = os.listdir(train_dir)

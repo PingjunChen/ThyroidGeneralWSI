@@ -11,6 +11,7 @@ from pydaily import format
 from pyimg import combine
 
 
+
 def annotate_images(data_dir, cur_set, cur_cat, slide_level):
     slides_dir = os.path.join(data_dir, "Slides", cur_set, cur_cat)
     slide_list = [ele for ele in os.listdir(slides_dir) if "tiff" in ele]
@@ -60,9 +61,9 @@ if __name__ == "__main__":
     np.random.seed(3333)
 
     slide_level=4
-    data_dir = "/media/pingjun/Pingjun350/ThyroidData/TrainVal"
+    data_dir = "../data/TrainVal"
     categories = ["1Benign", "2Uncertain", "3Malignant"]
-    which_set = ["Val", "Train"]
+    which_set = ["val", "train"]
 
     for cur_set in which_set:
         print("Current set is: {}".format(cur_set))
