@@ -21,12 +21,16 @@ def set_args():
     parser.add_argument("--maxepoch",        type=int,   default=100,     help="number of epochs to train")
     parser.add_argument("--decay_epoch",     type=int,   default=1,       help="lr start to decay linearly from decay_epoch")
     parser.add_argument("--save_freq",       type=int,   default=1,       help="how frequent to save the model")
+
     # model setting
-    parser.add_argument("--input_fea_num",   type=int)
-    parser.add_argument("--mode",            type=str)
-    parser.add_argument("--class_num",       type=int,   default=3)
+    parser.add_argument('--device_id',       type=str,   default="7",     help='which device')
     parser.add_argument("--data_dir",        type=str,   default="../data")
-    parser.add_argument("--pre_load",        action='store_true')
+    parser.add_argument('--model_type',      type=str,   default="inceptionv3")
+    parser.add_argument("--input_fea_num",   type=int,   default=2048)
+    parser.add_argument("--mode",            type=str,   default="pooling")
+    parser.add_argument("--class_num",       type=int,   default=3)
+
+    parser.add_argument("--pre_load",        action='store_true', default=True)
     parser.add_argument('--verbose',         action='store_true')
     args = parser.parse_args()
     return args
@@ -34,13 +38,15 @@ def set_args():
 
 if  __name__ == '__main__':
     args = set_args()
+    os.environ["CUDA_VISIBLE_DEVICES"] = str(args.device_id)
+
     # Model preparetion
     net = WsiNet(class_num=args.class_num, in_channels=args.input_fea_num, mode=args.mode)
     net.cuda()
 
     # Dataset preparetion
-    train_data_root = os.path.join(args.data_dir, "Feas", "InceptionV3", "train")
-    val_data_root = os.path.join(args.data_dir, "Feas", "InceptionV3", "test")
+    train_data_root = os.path.join(args.data_dir, "Feas", args.model_type, "train")
+    val_data_root = os.path.join(args.data_dir, "Feas", args.model_type, "test")
 
     # create dataset
     train_dataset = ThyroidDataSet(train_data_root, testing=False, pre_load=args.pre_load)
@@ -53,6 +59,6 @@ if  __name__ == '__main__':
     val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, pin_memory=True)
 
     print(">> START training")
-    model_root = os.path.join(args.data_dir, "Models", "SlideModels", "InceptionV3", args.mode)
+    model_root = os.path.join(args.data_dir, "Models", "SlideModels", args.model_type, args.mode)
     filesystem.overwrite_dir(model_root)
     train_cls(train_dataloader, val_dataloader, model_root, net, args)
