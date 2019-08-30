@@ -42,7 +42,7 @@ def split_regions(slide_path, img_level=2, cnt_level=3):
     wsi_img = slide_head.read_region((0, 0), img_level, wsi_dim)
     wsi_img = np.array(wsi_img)[:,:,:3]
 
-    RAW_SIZE = 299
+    RAW_SIZE = 256
     SIZE1, SIZE2, SIZE4 = int(RAW_SIZE/4), int(RAW_SIZE/2), RAW_SIZE
     split_arr, patch_list = [], []
     for c_ind in range(len(cnts)):
