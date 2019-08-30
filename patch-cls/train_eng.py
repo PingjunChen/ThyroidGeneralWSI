@@ -38,10 +38,11 @@ def train_thyroid(args):
     # optimizer & loss
     optimizer = optim.SGD(model.parameters(), lr=args.lr,
                           weight_decay=5.0e-4, momentum=0.9, nesterov=True)
-    criterion =nn.CrossEntropyLoss()
+    criterion =nn.CrossEntropyLoss(weight=torch.FloatTensor([1.0, 1.8, 1.5]).cuda())
+
     # dataloader
-    train_thyroid_loader = train_loader(args.batch_size)
-    val_thyroid_loader = val_loader(args.batch_size)
+    train_thyroid_loader = train_loader(args.batch_size, args.patch_size)
+    val_thyroid_loader = val_loader(args.batch_size, args.patch_size)
 
     # folder for model saving
     model_dir = os.path.join(args.model_dir, args.model_name, args.session)

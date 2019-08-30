@@ -22,7 +22,8 @@ def set_args():
     parser.add_argument('--model_dir',       type=str,   default="../data/Models/PatchModels")
     parser.add_argument('--data_name',       type=str,   default="thyroid")
     parser.add_argument('--class_num',       type=int,   default=3)
-    parser.add_argument('--model_name',      type=str,   default="resnet50")
+    parser.add_argument('--model_name',      type=str,   default="inceptionv3")
+    parser.add_argument('--patch_size',      type=int,   default=299)
     parser.add_argument('--session',         type=str,   default="01")
     parser.add_argument("--gpu",             type=str,   default="7",     help="training gpu")
 

@@ -9,8 +9,8 @@ from torchvision import datasets, transforms
 
 
 DataRoot = "../data/Patches/"
-TrainDir = os.path.join(DataRoot, 'Train')
-ValDir = os.path.join(DataRoot, 'Val')
+TrainDir = os.path.join(DataRoot, 'train')
+ValDir = os.path.join(DataRoot, 'val')
 
 
 def find_ext_files(dir_name, ext):
@@ -44,16 +44,17 @@ def get_mean_and_std(img_dir, suffix):
 # print("std rgb: {}".format(rgb_std))
 
 
-rgb_mean, rgb_std = (0.8071, 0.6344, 0.8158), (0.1319, 0.1650, 0.094)
+rgb_mean, rgb_std = (0.800, 0.630, 0.815), (0.136, 0.168, 0.096)
 
 
-def train_loader(batch_size):
+def train_loader(batch_size, input_size):
     kwargs = {"num_workers": 4, "pin_memory": True}
     train_dataset = datasets.ImageFolder(TrainDir,
         transform = transforms.Compose([
             transforms.RandomRotation(12),
             transforms.ColorJitter(brightness=0.12, contrast=0.12, saturation=0.12),
             transforms.RandomHorizontalFlip(),
+            transforms.Resize(input_size),
             transforms.ToTensor(),
             transforms.Normalize(rgb_mean, rgb_std)])
         )
@@ -64,11 +65,12 @@ def train_loader(batch_size):
     return loader
 
 
-def val_loader(batch_size):
+def val_loader(batch_size, input_size):
     kwargs = {"num_workers": 4, "pin_memory": True}
 
     val_dataset = datasets.ImageFolder(ValDir,
         transform = transforms.Compose([
+            transforms.Resize(input_size),
             transforms.ToTensor(),
             transforms.Normalize(rgb_mean, rgb_std)])
         )
