@@ -17,18 +17,6 @@ multi_class_map_dict = {
 
 
 """
-class_reverse_map = {
-    0: "1Benign",
-    1: "2Uncertain",
-    2: "3Malignant",
-}
-"""
-class_reverse_map = {}
-for k, v in multi_class_map_dict.items():
-    class_reverse_map[v] = k
-
-
-"""
 folder_map_dict = {
     "1Benign": 0,
     "2Uncertain": 1,
@@ -50,3 +38,15 @@ folder_reverse_map = {
 folder_reverse_map = {}
 for k, v in folder_map_dict.items():
     folder_reverse_map[v] = k
+
+
+"""
+class_reverse_map = {
+    0: "1Benign",
+    1: "2Uncertain",
+    2: "3Malignant",
+}
+"""
+class_reverse_map = {}
+for k, v in multi_class_map_dict.items():
+    class_reverse_map[v] = k    

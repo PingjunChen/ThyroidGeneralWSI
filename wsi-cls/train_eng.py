@@ -31,7 +31,7 @@ def train_cls(dataloader, val_dataloader, model_root, net, args):
     lr_scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer,
         lr_lambda=LambdaLR(args.maxepoch, start_epoch, args.decay_epoch).step)
     train_loss, step_cnt, batch_count = 0.0, 0, 0
-    best_acc = 0.0
+    best_acc = 0.50
     for epoc_num in np.arange(start_epoch, args.maxepoch+1):
         for batch_idx, (batch_data, gt_classes, true_num, bboxes) in enumerate(dataloader):
             im_data   = batch_data.cuda().float()
@@ -82,7 +82,7 @@ def train_cls(dataloader, val_dataloader, model_root, net, args):
         net.train()
 
         lr_scheduler.step()
-        if epoc_num % args.save_freq == 0 and cls_acc >= best_acc:
+        if epoc_num % args.save_freq == 0 and cls_acc >= best_acc and epoc_num >= args.maxepoch/2:
             save_model_name = 'epoch-{}-acc-{:.3f}.pth'.format(str(epoc_num).zfill(3), cls_acc)
             torch.save(net.state_dict(), os.path.join(model_root, save_model_name))
             print('Model saved as {}'.format(save_model_name))
