@@ -64,7 +64,7 @@ def predit_all_feas(model, args):
 
 def set_args():
     parser = argparse.ArgumentParser(description="Settings for thyroid slide patch feature generation")
-    parser.add_argument('--device_id',            type=str, default="7",     help='which device')
+    parser.add_argument('--device_id',            type=str, default="5",     help='which device')
     parser.add_argument('--slide_dir',            type=str, default="../data/Slides")
     parser.add_argument('--fea_dir',              type=str, default="../data/Feas")
     parser.add_argument('--dset',                 type=str, default="train")

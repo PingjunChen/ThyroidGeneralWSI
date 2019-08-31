@@ -140,10 +140,10 @@ def sort_by_prob(BBoxes, ClsProbs, ClsLogits, FeaVecs):
     norm_prob_list = [ele[0] for ele in ClsProbs]
     sorting_indx = np.argsort(norm_prob_list)
 
-    fea_dict["prob"] = np.array([ClsProbs[ind] for ind in sorting_indx])
-    fea_dict["logit"] = np.array([ClsLogits[ind] for ind in sorting_indx])
-    fea_dict["feat"] = np.array([FeaVecs[ind] for ind in sorting_indx])
-    fea_dict["bbox"] = np.array([BBoxes[ind] for ind in sorting_indx])
+    fea_dict["probs"] = np.array([ClsProbs[ind] for ind in sorting_indx])
+    fea_dict["logits"] = np.array([ClsLogits[ind] for ind in sorting_indx])
+    fea_dict["feas"] = np.array([FeaVecs[ind] for ind in sorting_indx])
+    fea_dict["bboxes"] = np.array([BBoxes[ind] for ind in sorting_indx])
 
     return fea_dict
 
