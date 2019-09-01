@@ -10,9 +10,6 @@ from torchvision import transforms
 import torch.nn.functional as F
 
 
-rgb_mean, rgb_std = (0.800, 0.630, 0.815), (0.136, 0.168, 0.096)
-
-
 class PatchDataset(data.Dataset):
     """
     Dataset for thyroid slide testing. Thyroid slides would be splitted into multiple patches.
@@ -21,8 +18,8 @@ class PatchDataset(data.Dataset):
 
     def __init__(self, slide_patches, patch_size):
         self.patches = slide_patches
-        self.rgb_mean = rgb_mean
-        self.rgb_std = rgb_std
+        self.rgb_mean = (0.800, 0.630, 0.815)
+        self.rgb_std = (0.136, 0.168, 0.096)
         self.transform = transforms.Compose([transforms.ToPILImage(),
             transforms.Resize(patch_size), transforms.ToTensor(),
             transforms.Normalize(mean=self.rgb_mean, std=self.rgb_std)])
