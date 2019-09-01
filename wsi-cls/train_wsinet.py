@@ -7,7 +7,7 @@ import torch
 from torch.utils.data import DataLoader
 from pydaily import filesystem
 
-from thyroid_dataset import ThyroidDataSet, BatchSampler
+from thyroid_dataset import ThyroidDataSet
 from wsinet  import WsiNet
 from train_eng import train_cls
 
@@ -23,7 +23,7 @@ def set_args():
     parser.add_argument("--save_freq",       type=int,   default=1,       help="how frequent to save the model")
 
     # model setting
-    parser.add_argument('--device_id',       type=str,   default="7",     help='which device')
+    parser.add_argument('--device_id',       type=str,   default="6",     help='which device')
     parser.add_argument("--data_dir",        type=str,   default="../data")
     parser.add_argument('--model_type',      type=str,   default="vgg16bn")
     parser.add_argument("--input_fea_num",   type=int,   default=4096)
@@ -47,17 +47,13 @@ if  __name__ == '__main__':
     # Dataset preparetion
     train_data_root = os.path.join(args.data_dir, "Feas", args.model_type, "train")
     val_data_root = os.path.join(args.data_dir, "Feas", args.model_type, "test")
-
     # create dataset
     train_dataset = ThyroidDataSet(train_data_root, testing=False, pre_load=args.pre_load)
     val_dataset = ThyroidDataSet(val_data_root, testing=True, testing_num=128, pre_load=args.pre_load)
 
-    # # create dataloader
-    # batch_sampler  = BatchSampler(label_dict=train_dataset.label_dict, batch_size=args.batch_size,
-    #     data_len=len(train_dataset), class_ratio_array=train_dataset.class_ratio_array, num_sampling=8)
-    # train_dataloader = DataLoader(dataset=train_dataset, batch_sampler=batch_sampler, pin_memory=True)
-    train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, pin_memory=True)
-    val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, pin_memory=True)
+
+    train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, num_workers=0, pin_memory=True)
+    val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, num_workers=0, pin_memory=True)
 
     print(">> START training")
     model_root = os.path.join(args.data_dir, "Models", "SlideModels", args.model_type, args.mode)
