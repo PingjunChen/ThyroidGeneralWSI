@@ -25,9 +25,9 @@ def set_args():
     # model setting
     parser.add_argument('--device_id',       type=str,   default="6",     help='which device')
     parser.add_argument("--data_dir",        type=str,   default="../data")
-    parser.add_argument('--model_type',      type=str,   default="vgg16bn")
-    parser.add_argument("--input_fea_num",   type=int,   default=4096)
-    parser.add_argument("--mode",            type=str,   default="selfatt")
+    parser.add_argument('--model_type',      type=str,   default="resnet50")
+    parser.add_argument("--input_fea_num",   type=int,   default=2048)
+    parser.add_argument("--mode",            type=str,   default="pooling")
     parser.add_argument("--class_num",       type=int,   default=3)
 
     parser.add_argument("--pre_load",        action='store_true', default=True)
@@ -46,14 +46,14 @@ if  __name__ == '__main__':
 
     # Dataset preparetion
     train_data_root = os.path.join(args.data_dir, "Feas", args.model_type, "train")
-    val_data_root = os.path.join(args.data_dir, "Feas", args.model_type, "test")
+    val_data_root = os.path.join(args.data_dir, "Feas", args.model_type, "val")
     # create dataset
     train_dataset = ThyroidDataSet(train_data_root, testing=False, pre_load=args.pre_load)
     val_dataset = ThyroidDataSet(val_data_root, testing=True, testing_num=128, pre_load=args.pre_load)
 
 
-    train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, num_workers=0, pin_memory=True)
-    val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, num_workers=0, pin_memory=True)
+    train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, num_workers=4, pin_memory=True)
+    val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, num_workers=4, pin_memory=True)
 
     print(">> START training")
     model_root = os.path.join(args.data_dir, "Models", "SlideModels", args.model_type, args.mode)
