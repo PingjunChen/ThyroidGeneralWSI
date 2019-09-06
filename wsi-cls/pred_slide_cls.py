@@ -11,15 +11,25 @@ from torch.utils.data import DataLoader
 from torch.autograd import Variable
 import torch.nn.functional as F
 from wsinet import WsiNet
-from thyroid_dataset import ThyroidDataSet
+
+from patch_utils import split_regions, gen_slide_feas
+
+
+def load_path_model(args):
+    # load patch model
+    patch_model_path = os.path.join(args.data_dir, "Models/PatchModels", args.model_type,
+                                    args.model_session, args.patch_model_name)
+    patch_model = torch.load(args.patch_model_path)
+    patch_model.cuda()
+    patch_model.eval()
+
+    return patch_model
 
 
 def load_wsinet(args):
     wsinet = WsiNet(class_num=args.class_num, in_channels=args.input_fea_num, mode=args.mode)
     weightspath = os.path.join(args.data_dir, "Models/SlideModels/BestModels", args.model_type,
                                args.mode, args.wsi_cls_name)
-    # weightspath = os.path.join(args.data_dir, "Models/SlideModels", args.model_type,
-    #                            args.mode, args.wsi_cls_name)
     wsi_weights_dict = torch.load(weightspath, map_location=lambda storage, loc: storage)
     wsinet.load_state_dict(wsi_weights_dict)
     wsinet.cuda()
@@ -52,8 +62,8 @@ def test_cls(net, dataloader):
 def set_args():
     parser = argparse.ArgumentParser(description = 'Thyroid WSI diagnois')
     parser.add_argument("--batch_size",      type=int,   default=24,      help="batch size")
-    parser.add_argument('--device_id',       type=str,   default="7",     help='which device')
-    parser.add_argument('--test_num',        type=int,   default=1024,     help='which device')
+    parser.add_argument('--device_id',       type=str,   default="4",     help='which device')
+    parser.add_argument('--test_num',        type=int,   default=128,     help='which device')
 
     # model setting
     parser.add_argument("--class_num",       type=int,   default=3)
@@ -62,7 +72,15 @@ def set_args():
     parser.add_argument('--model_type',      type=str,   default="vgg16bn")
     parser.add_argument("--mode",            type=str,   default="pooling")
     parser.add_argument('--wsi_cls_name',    type=str,   default="model-816.pth")
-    parser.add_argument("--pre_load",        action='store_true', default=True)
+
+    parser.add_argument('--model_dir',       type=str, default="../data/Models/PatchModels")
+    parser.add_argument('--model_session',   type=str, default="01")
+    parser.add_argument('--patch_model_name',type=str, default="thyroid02-0.7751.pth")
+
+    parser.add_argument('--batch_size',      type=int,   default=32)
+    parser.add_argument('--img_level',       type=int,   default=2)
+    parser.add_argument('--cnt_level',       type=int,   default=3)
+
     parser.add_argument('--verbose',         action='store_true')
     args = parser.parse_args()
     return args
@@ -72,12 +90,18 @@ if __name__ == "__main__":
     args = set_args()
     os.environ["CUDA_VISIBLE_DEVICES"] = str(args.device_id)
     # model
-    wsi_net = load_wsinet(args)
+    patch_model = load_path_model(args)
+    wsi_model = load_wsinet(args)
     # dataset
-    test_data_root = os.path.join(args.data_dir, "Feas", args.model_type, "test")
-    test_dataset = ThyroidDataSet(test_data_root, testing=True, testing_num=args.test_num, pre_load=args.pre_load)
-    test_dataloader = DataLoader(dataset=test_dataset, batch_size= args.batch_size, num_workers=4, pin_memory=True)
+    test_slide_dir = os.path.join(args.data_dir, "Slides/test/3Malignant")
+    slide_list = [ele for ele in os.listdir(test_slide_dir) if "tiff" in ele]
+    print(">> START overlaying...")
+    for ind, cur_slide in enumerate(slide_list):
+        cur_slide_path = os.path.join(test_slide_dir, cur_slide)
+        split_arr, patch_list, wsi_dim, s_img, mask = split_regions(cur_slide_path, args.img_level, args.cnt_level)
+        if len(split_arr) == 0:
+            continue
+        probs, logits, feas, bboxes = gen_slide_feas(cls_model, split_arr, np.asarray(patch_list), wsi_dim, args)
 
-    print(">> START testing {} with {}".format(args.model_type, args.mode))
-    print(">> model name: {} with test_num: {}".format(args.wsi_cls_name, args.test_num))
-    test_cls(wsi_net, test_dataloader)
+
+    # test_cls(wsi_net, test_dataloader)
