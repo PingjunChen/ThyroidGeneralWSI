@@ -102,6 +102,4 @@ if __name__ == "__main__":
         if len(split_arr) == 0:
             continue
         probs, logits, feas, bboxes = gen_slide_feas(cls_model, split_arr, np.asarray(patch_list), wsi_dim, args)
-
-
-    # test_cls(wsi_net, test_dataloader)
+        # test_cls(wsi_net, test_dataloader)
