@@ -51,7 +51,6 @@ if  __name__ == '__main__':
     train_dataset = ThyroidDataSet(train_data_root, testing=False, pre_load=args.pre_load)
     val_dataset = ThyroidDataSet(val_data_root, testing=True, testing_num=128, pre_load=args.pre_load)
 
-
     train_dataloader = DataLoader(dataset=train_dataset, batch_size= args.batch_size, num_workers=4, pin_memory=True)
     val_dataloader = DataLoader(dataset=val_dataset, batch_size= args.batch_size, num_workers=4, pin_memory=True)
 

@@ -18,8 +18,6 @@ def load_wsinet(args):
     wsinet = WsiNet(class_num=args.class_num, in_channels=args.input_fea_num, mode=args.mode)
     weightspath = os.path.join(args.data_dir, "Models/SlideModels/BestModels", args.model_type,
                                args.mode, args.wsi_cls_name)
-    # weightspath = os.path.join(args.data_dir, "Models/SlideModels", args.model_type,
-    #                            args.mode, args.wsi_cls_name)
     wsi_weights_dict = torch.load(weightspath, map_location=lambda storage, loc: storage)
     wsinet.load_state_dict(wsi_weights_dict)
     wsinet.cuda()
@@ -60,8 +58,8 @@ def set_args():
     parser.add_argument("--input_fea_num",   type=int,   default=4096)
     parser.add_argument("--data_dir",        type=str,   default="../data")
     parser.add_argument('--model_type',      type=str,   default="vgg16bn")
-    parser.add_argument("--mode",            type=str,   default="pooling")
-    parser.add_argument('--wsi_cls_name',    type=str,   default="model-816.pth")
+    parser.add_argument("--mode",            type=str,   default="selfatt")
+    parser.add_argument('--wsi_cls_name',    type=str,   default="model-838.pth")
     parser.add_argument("--pre_load",        action='store_true', default=True)
     parser.add_argument('--verbose',         action='store_true')
     args = parser.parse_args()

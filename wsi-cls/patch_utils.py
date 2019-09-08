@@ -10,6 +10,7 @@ from torchvision import transforms
 import torch.nn.functional as F
 
 import openslide
+import matplotlib.pyplot as plt
 from skimage import color, filters
 from skimage import img_as_ubyte
 from scipy.ndimage import binary_fill_holes
@@ -151,12 +152,14 @@ def gen_slide_feas(cls_model, split_arr, patches, wsi_dim, args):
     if patches.shape[0] > 0: # exist
         ClsProbs, ClsLogits, FeaVecs = pred_feas(cls_model, patches, args)
         for coor in split_arr:
-            cur_x, cur_y = coor[1]+SIZE1, coor[0]+SIZE1
-            cur_bbox = [cur_x, cur_y, SIZE2, SIZE2]
+            cur_h, cur_w = coor[0]+SIZE1, coor[1]+SIZE1,
+            cur_bbox = [cur_h, cur_w, SIZE2, SIZE2]
             BBoxes.append(cur_bbox)
 
     norm_prob_list = [ele[0] for ele in ClsProbs]
     sorting_indx = np.argsort(norm_prob_list)
+    test_patch_num = min(args.test_num, len(sorting_indx))
+    sorting_indx = sorting_indx[:test_patch_num]
 
     probs = np.array([ClsProbs[ind] for ind in sorting_indx])
     logits = np.array([ClsLogits[ind] for ind in sorting_indx])
@@ -238,3 +241,27 @@ def split_regions(slide_path, img_level=2, cnt_level=3):
                 except:
                     print("Error in Polygon relationship")
     return split_arr, patch_list, wsi_dim, s_img, mask
+
+
+def overlayWSI(cur_slide_path, bboxes, weights, s_level, alp=0.65):
+    wsi_head = openslide.OpenSlide(cur_slide_path)
+    wsi_img = wsi_head.read_region((0,0), s_level, wsi_head.level_dimensions[s_level])
+    wsi_img = np.array(wsi_img)[:, :, :-1]
+
+    alpha = np.zeros((wsi_img.shape[0], wsi_img.shape[1]), np.uint8)
+    att_vals = np.array(weights) / max(weights)
+
+    for ib in np.arange(len(att_vals)):
+        val = int(att_vals[ib] * 255)
+        h_start = int(bboxes[ib][0])
+        w_start = int(bboxes[ib][1])
+        h_end = h_start + int(bboxes[ib][2])
+        w_end = w_start + int(bboxes[ib][3])
+        alpha[h_start:h_end, w_start:w_end] = val
+
+    alpha = filters.gaussian(alpha, sigma=16)
+    cmap = plt.get_cmap('jet')
+    heat_map = cmap(alpha)[:, :, :-1]
+    alpha_wsi = (wsi_img * alp + heat_map * (1 - alp) * 255.0).astype(np.uint8)
+
+    return alpha_wsi
