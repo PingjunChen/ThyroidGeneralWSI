@@ -22,10 +22,10 @@ def set_args():
     parser.add_argument('--model_dir',       type=str,   default="../data/CV01/Models/PatchModels")
     parser.add_argument('--data_name',       type=str,   default="thyroid")
     parser.add_argument('--class_num',       type=int,   default=3)
-    parser.add_argument('--model_name',      type=str,   default="vgg16bn")
-    parser.add_argument('--patch_size',      type=int,   default=224)
+    parser.add_argument('--model_name',      type=str,   default="inceptionv3")
+    parser.add_argument('--patch_size',      type=int,   default=299)
     parser.add_argument('--session',         type=str,   default="01")
-    parser.add_argument('--device_id',       type=str,   default="1",  help='which device')
+    parser.add_argument('--device_id',       type=str,   default="2",  help='which device')
 
     args = parser.parse_args()
     return args
