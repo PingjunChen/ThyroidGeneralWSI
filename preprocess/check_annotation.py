@@ -61,9 +61,9 @@ if __name__ == "__main__":
     np.random.seed(3333)
 
     slide_level=4
-    data_dir = "../data/TrainVal"
+    data_dir = "../data/CV01"
     categories = ["1Benign", "2Uncertain", "3Malignant"]
-    which_set = ["val", "train"]
+    which_set = ["train", "val"]
 
     for cur_set in which_set:
         print("Current set is: {}".format(cur_set))

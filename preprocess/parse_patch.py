@@ -36,7 +36,7 @@ def extract_patches(data_dir, cur_set, cur_cat, patch_size):
             width_ratio = int(np.ceil(cur_width / patch_size))
 
             # Number of patches to crop
-            random_num = int(height_ratio * width_ratio / 10)
+            random_num = int(height_ratio * width_ratio / 3)
 
             for ind in range(random_num):
                 rand_h = np.random.randint(0, max_rand_h)
@@ -66,11 +66,11 @@ def extract_patches(data_dir, cur_set, cur_cat, patch_size):
 
 
 if __name__ == '__main__':
-    np.random.seed(1234)
+    np.random.seed(1236)
 
-    data_dir = "../data/TrainVal"
-    categories = ["1Benign", "2Uncertain", "3Malignant"]
-    # categories = ["2Uncertain", "3Malignant"]
+    data_dir = "../data/CV01"
+    # categories = ["1Benign", "2Uncertain", "3Malignant"]
+    categories = ["2Uncertain", "3Malignant"]
     which_set = ["train", "val"]
 
     for cur_set in which_set:
