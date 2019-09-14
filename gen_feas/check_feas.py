@@ -8,7 +8,7 @@ from pydaily import filesystem
 
 def set_args():
     parser = argparse.ArgumentParser(description="check fea generation")
-    parser.add_argument('--fea_dir',              type=str, default="../data/Feas/vgg16bn")
+    parser.add_argument('--fea_dir',              type=str, default="../data/CV01/Feas/vgg16bn")
     parser.add_argument('--dset',                 type=str, default="train")
 
     args = parser.parse_args()

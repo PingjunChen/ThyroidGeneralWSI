@@ -64,17 +64,16 @@ def predit_all_feas(model, args):
 
 def set_args():
     parser = argparse.ArgumentParser(description="Settings for thyroid slide patch feature generation")
-    parser.add_argument('--device_id',            type=str, default="5",     help='which device')
-    parser.add_argument('--slide_dir',            type=str, default="../data/Slides")
-    parser.add_argument('--fea_dir',              type=str, default="../data/Feas")
-    parser.add_argument('--dset',                 type=str, default="train")
+    parser.add_argument('--device_id',            type=str, default="7",     help='which device')
+    parser.add_argument('--slide_dir',            type=str, default="../data/CV01/Slides")
+    parser.add_argument('--fea_dir',              type=str, default="../data/CV01/Feas")
+    parser.add_argument('--dset',                 type=str, default="val")
     # patch model setting
-    parser.add_argument('--model_dir',            type=str, default="../data/Models/PatchModels")
+    parser.add_argument('--model_dir',            type=str, default="../data/CV01/Models/PatchModels")
     parser.add_argument('--model_type',           type=str, default="vgg16bn")
-    parser.add_argument('--model_session',        type=str, default="01")
-    parser.add_argument('--model_name',           type=str, default="thyroid02-0.7751.pth")
+    parser.add_argument('--model_name',           type=str, default="thyroid00-0.7721.pth")
     parser.add_argument('--patch_size',           type=int, default=224)
-    parser.add_argument('--batch_size',           type=int, default=32)
+    parser.add_argument('--batch_size',           type=int, default=64)
     parser.add_argument('--img_level',            type=int, default=2)
     parser.add_argument('--cnt_level',            type=int, default=3)
     parser.add_argument('--verbose',              action='store_true')
@@ -88,7 +87,7 @@ if __name__ == '__main__':
     os.environ["CUDA_VISIBLE_DEVICES"] = str(args.device_id)
 
     # load patch model
-    args.model_path = os.path.join(args.model_dir, args.model_type, args.model_session, args.model_name)
+    args.model_path = os.path.join(args.model_dir, args.model_type, args.model_name)
     if not os.path.exists(args.model_path):
         raise AssertionError("Model path does not exist")
     ft_model = torch.load(args.model_path)
