@@ -6,10 +6,10 @@ import shutil
 
 
 if __name__ == "__main__":
-    split_seed = 1234
+    split_seed = 1235
 
     src_dir = "../data/TrainAll/Slides"
-    dst_dir = "../data/CV01/Slides"
+    dst_dir = "../data/CV02/Slides"
     categories = ["1Benign", "2Uncertain", "3Malignant"]
     for cur_cat in categories:
         cur_cat_dir = os.path.join(src_dir, cur_cat)

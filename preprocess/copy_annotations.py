@@ -4,9 +4,9 @@ import os, sys
 import shutil
 
 if __name__ == "__main__":
-    slides_dir = "../data/CV01/Slides"
+    slides_dir = "../data/CV02/Slides"
     src_anno_dir = "../data/TrainAll/Annotations"
-    dst_anno_dir = "../data/CV01/Annotations"
+    dst_anno_dir = "../data/CV02/Annotations"
 
     categories = ["1Benign", "2Uncertain", "3Malignant"]
     splits = ["train", "val"]
