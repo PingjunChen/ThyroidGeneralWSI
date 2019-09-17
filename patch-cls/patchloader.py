@@ -8,7 +8,7 @@ import torch.utils.data
 from torchvision import datasets, transforms
 
 
-DataRoot = "../data/CV01/Patches"
+DataRoot = "../data/CV02/Patches"
 TrainDir = os.path.join(DataRoot, 'train')
 ValDir = os.path.join(DataRoot, 'val')
 
