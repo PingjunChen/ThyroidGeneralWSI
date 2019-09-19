@@ -19,13 +19,13 @@ def set_args():
     parser.add_argument('--lr_decay_ratio',  type=float, default=0.3)
     parser.add_argument('--log_interval',    type=int,   default=500)
     # model directory and name
-    parser.add_argument('--model_dir',       type=str,   default="../data/CV02/Models/PatchModels")
+    parser.add_argument('--model_dir',       type=str,   default="../data/CV00/Models/PatchModels")
     parser.add_argument('--data_name',       type=str,   default="thyroid")
     parser.add_argument('--class_num',       type=int,   default=3)
-    parser.add_argument('--model_name',      type=str,   default="inceptionv3")
-    parser.add_argument('--patch_size',      type=int,   default=299)
+    parser.add_argument('--model_name',      type=str,   default="resnet18")
+    parser.add_argument('--patch_size',      type=int,   default=224)
     parser.add_argument('--session',         type=str,   default="01")
-    parser.add_argument('--device_id',       type=str,   default="3",  help='which device')
+    parser.add_argument('--device_id',       type=str,   default="7",  help='which device')
 
     args = parser.parse_args()
     return args
