@@ -94,7 +94,7 @@ def extract_deep_feas(model, inputs, model_name):
         fea = model.classifier[:4](x)
         logit = model.classifier[4:](fea)
         prob = F.softmax(logit, dim=-1)
-    elif "resnet50" == model_name:
+    elif "resnet50" == model_name or "resnet18" == model_name:
         x = model.conv1(inputs)
         x = model.bn1(x)
         x = model.relu(x)
