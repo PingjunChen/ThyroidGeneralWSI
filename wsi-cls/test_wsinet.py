@@ -16,8 +16,8 @@ from thyroid_dataset import ThyroidDataSet
 
 def load_wsinet(args):
     wsinet = WsiNet(class_num=args.class_num, in_channels=args.input_fea_num, mode=args.mode)
-    weightspath = os.path.join(args.data_dir, "Models/SlideModels/BestModels", args.model_type,
-                               args.mode, args.wsi_cls_name)
+    weightspath = os.path.join(args.data_dir, "Models/SlideModels/BestModels", args.model_type, args.mode, args.wsi_cls_name)
+    # weightspath = os.path.join(args.data_dir, "Models/SlideModels", args.model_type, args.mode, args.wsi_cls_name)
     wsi_weights_dict = torch.load(weightspath, map_location=lambda storage, loc: storage)
     wsinet.load_state_dict(wsi_weights_dict)
     wsinet.cuda()
@@ -50,16 +50,16 @@ def test_cls(net, dataloader):
 def set_args():
     parser = argparse.ArgumentParser(description = 'Thyroid WSI diagnois')
     parser.add_argument("--batch_size",      type=int,   default=24,      help="batch size")
-    parser.add_argument('--device_id',       type=str,   default="5",     help='which device')
-    parser.add_argument('--test_num',        type=int,   default=1024,     help='which device')
+    parser.add_argument('--device_id',       type=str,   default="7",     help='which device')
+    parser.add_argument('--test_num',        type=int,   default=1024,    help='which device')
 
     # model setting
     parser.add_argument("--class_num",       type=int,   default=3)
     parser.add_argument("--input_fea_num",   type=int,   default=2048)
     parser.add_argument("--data_dir",        type=str,   default="../data/CV01")
-    parser.add_argument('--model_type',      type=str,   default="resnet50")
+    parser.add_argument('--model_type',      type=str,   default="inceptionv3")
     parser.add_argument("--mode",            type=str,   default="selfatt")
-    parser.add_argument('--wsi_cls_name',    type=str,   default="model-846.pth")
+    parser.add_argument('--wsi_cls_name',    type=str,   default="model-833.pth")
     parser.add_argument("--pre_load",        action='store_true', default=True)
     parser.add_argument('--verbose',         action='store_true')
     args = parser.parse_args()

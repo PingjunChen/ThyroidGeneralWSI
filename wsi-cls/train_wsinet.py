@@ -23,8 +23,8 @@ def set_args():
     parser.add_argument("--save_freq",       type=int,   default=1,       help="how frequent to save the model")
 
     # model setting
-    parser.add_argument('--device_id',       type=str,   default="2",     help='which device')
-    parser.add_argument("--data_dir",        type=str,   default="../data/CV01")
+    parser.add_argument('--device_id',       type=str,   default="5",     help='which device')
+    parser.add_argument("--data_dir",        type=str,   default="../data/CV02")
     parser.add_argument('--model_type',      type=str,   default="vgg16bn")
     parser.add_argument("--input_fea_num",   type=int,   default=4096)
     parser.add_argument("--mode",            type=str,   default="pooling")
