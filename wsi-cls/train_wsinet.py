@@ -24,10 +24,10 @@ def set_args():
 
     # model setting
     parser.add_argument('--device_id',       type=str,   default="7",     help='which device')
-    parser.add_argument("--data_dir",        type=str,   default="../data/CV02")
-    parser.add_argument('--model_type',      type=str,   default="resnet18")
-    parser.add_argument("--input_fea_num",   type=int,   default=512)
-    parser.add_argument("--mode",            type=str,   default="selfatt")
+    parser.add_argument("--data_dir",        type=str,   default="../data/CV00")
+    parser.add_argument('--model_type',      type=str,   default="resnet50")
+    parser.add_argument("--input_fea_num",   type=int,   default=2048)
+    parser.add_argument("--mode",            type=str,   default="pooling")
     parser.add_argument("--class_num",       type=int,   default=3)
 
     parser.add_argument("--pre_load",        action='store_true', default=True)
