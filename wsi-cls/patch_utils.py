@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os, sys
+import math
 import numpy as np
 import torch
 import torch.nn as nn
@@ -17,7 +18,7 @@ from scipy.ndimage import binary_fill_holes
 from skimage.morphology import remove_small_objects
 from shapely.geometry import Polygon
 import cv2
-import math
+
 
 
 class PatchDataset(data.Dataset):
