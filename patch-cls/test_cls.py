@@ -12,12 +12,12 @@ from patchloader import val_loader
 def set_args():
     parser = argparse.ArgumentParser(description='Thyroid Classification')
     parser.add_argument('--seed',            type=int,   default=1234)
-    parser.add_argument('--model_dir',       type=str,   default="../data/CV02/Models/PatchModels")
+    parser.add_argument('--model_dir',       type=str,   default="../data/CV03/Models/PatchModels")
     parser.add_argument('--data_name',       type=str,   default="thyroid")
     parser.add_argument('--model_name',      type=str,   default="vgg16bn")
     parser.add_argument('--model_path',      type=str,   default="thyroid00-0.7721.pth")
     parser.add_argument('--batch_size',      type=int,   default=32)
-    parser.add_argument('--patch_size',      type=int,   default=299)
+    parser.add_argument('--patch_size',      type=int,   default=224)
     parser.add_argument('--device_id',       type=str,   default="3",     help='which device')
 
     args = parser.parse_args()

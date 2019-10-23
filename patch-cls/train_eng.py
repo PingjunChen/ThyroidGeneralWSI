@@ -26,7 +26,6 @@ def train_thyroid(args):
         model.fc = nn.Linear(2048, args.class_num)
     elif args.model_name == "resnet50":
         model = models.resnet50(pretrained=True)
-        import pdb; pdb.set_trace()
         model.fc = nn.Linear(2048, args.class_num)
     elif args.model_name == "resnet18":
         model = models.resnet18(pretrained=True)
