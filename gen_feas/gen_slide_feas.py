@@ -64,16 +64,16 @@ def predit_all_feas(model, args):
 
 def set_args():
     parser = argparse.ArgumentParser(description="Settings for thyroid slide patch feature generation")
-    parser.add_argument('--device_id',            type=str, default="5",     help='which device')
-    parser.add_argument('--slide_dir',            type=str, default="../data/CV01/Slides")
-    parser.add_argument('--fea_dir',              type=str, default="../data/CV01/Feas")
+    parser.add_argument('--device_id',            type=str, default="6",     help='which device')
+    parser.add_argument('--slide_dir',            type=str, default="../data/CV03/Slides")
+    parser.add_argument('--fea_dir',              type=str, default="../data/CV03/Feas")
     parser.add_argument('--dset',                 type=str, default="test")
     # patch model setting
-    parser.add_argument('--model_dir',            type=str, default="../data/CV01/Models/PatchModels")
-    parser.add_argument('--model_type',           type=str, default="resnet18")
-    parser.add_argument('--model_name',           type=str, default="thyroid00-0.7829.pth")
+    parser.add_argument('--model_dir',            type=str, default="../data/CV03/Models/PatchModels")
+    parser.add_argument('--model_type',           type=str, default="vgg16bn")
+    parser.add_argument('--model_name',           type=str, default="thyroid01-0.7523.pth")
     parser.add_argument('--patch_size',           type=int, default=224)
-    parser.add_argument('--batch_size',           type=int, default=64)
+    parser.add_argument('--batch_size',           type=int, default=32)
     parser.add_argument('--img_level',            type=int, default=2)
     parser.add_argument('--cnt_level',            type=int, default=3)
     parser.add_argument('--verbose',              action='store_true')
