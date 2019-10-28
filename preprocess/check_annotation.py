@@ -61,7 +61,7 @@ if __name__ == "__main__":
     np.random.seed(3333)
 
     slide_level=4
-    data_dir = "../data/CV03"
+    data_dir = "../data/CV04"
     categories = ["1Benign", "2Uncertain", "3Malignant"]
     which_set = ["train", "val"]
 
