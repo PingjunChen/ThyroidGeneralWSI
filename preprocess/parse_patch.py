@@ -66,10 +66,10 @@ def extract_patches(data_dir, cur_set, cur_cat, patch_size):
 
 
 if __name__ == '__main__':
-    np.random.seed(1239)
+    np.random.seed(1238)
     data_dir = "../data/CV04"
-    categories = ["1Benign", "2Uncertain", "3Malignant"]
-    # categories = ["2Uncertain", "3Malignant"]
+    # categories = ["1Benign", "2Uncertain", "3Malignant"]
+    categories = ["2Uncertain", "3Malignant"]
     which_set = ["train", "val"]
 
     for cur_set in which_set:
