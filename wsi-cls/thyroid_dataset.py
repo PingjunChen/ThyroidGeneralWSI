@@ -42,7 +42,7 @@ class ThyroidDataSet(Dataset):
         self.chosen_num_list = list(range(testing_num, testing_num+64))
         self.max_num = testing_num+64 if not self.testing else self.testing_num
         self.fixed_num = 40
-        self.additoinal_num = 10
+        self.additoinal_num = 20
 
 
     def get_true_label(self, label):
