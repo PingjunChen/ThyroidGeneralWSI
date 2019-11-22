@@ -3,8 +3,9 @@
 import os, sys
 import argparse
 import numpy as np
-import time
+import time, json
 from sklearn.metrics import confusion_matrix
+from keras.utils import to_categorical
 
 import torch
 from torch.utils.data import DataLoader
@@ -28,7 +29,7 @@ def load_wsinet(args):
 
 def test_cls(net, dataloader):
     start_timer = time.time()
-    total_pred, total_gt = [], []
+    total_pred, total_pred_probs, total_gt = [], [], []
     for ind, (batch_feas, gt_classes, true_num, bboxes) in enumerate(dataloader):
         # print("Pred {:03d}/{:03d}".format(ind+1, len(dataloader)))
         im_data = Variable(batch_feas.cuda())
@@ -36,6 +37,7 @@ def test_cls(net, dataloader):
         _, cls_labels = torch.topk(cls_probs.cpu(), 1, dim=1)
         cls_labels = cls_labels.numpy()[:, 0]
         total_gt.extend(gt_classes.tolist())
+        total_pred_probs.extend(cls_probs.tolist())
         total_pred.extend(cls_labels.tolist())
 
     con_mat = confusion_matrix(total_gt, total_pred)
@@ -43,15 +45,30 @@ def test_cls(net, dataloader):
 
     total_time = time.time()-start_timer
     print("Testing Acc: {:.3f}".format(cur_eval_acc))
-    print("Confusion matrix:")
-    print(con_mat)
+    # print("Confusion matrix:")
+    # print(con_mat)
+    benign_pre, benign_recall = con_mat[0,0]/np.sum(con_mat[:, 0]), con_mat[0,0]/np.sum(con_mat[0, :])
+    print("   Benign: Precision {:.3f} Recall {:.3f}".format(benign_pre, benign_recall))
+    uncertain_pre, uncertain_recall = con_mat[1,1]/np.sum(con_mat[:, 1]), con_mat[1,1]/np.sum(con_mat[1, :])
+    print("Uncertain: Precision {:.3f} Recall {:.3f}".format(uncertain_pre, uncertain_recall))
+    malignant_pre, malignant_recall = con_mat[2,2]/np.sum(con_mat[:, 2]), con_mat[2,2]/np.sum(con_mat[2, :])
+    print("Malignant: Precision {:.3f} Recall {:.3f}".format(malignant_pre, malignant_recall))
+
+    test_gt_pred = {}
+    save_json = False
+    if save_json == True:
+        test_gt_pred['preds'] = total_pred_probs
+        test_gt_pred['gts'] = to_categorical(total_gt).tolist()
+        json_path = os.path.join("../Vis", "pred_gt.json")
+        with open(json_path, 'w') as fp:
+            json.dump(test_gt_pred, fp)
 
 
 def set_args():
     parser = argparse.ArgumentParser(description = 'Thyroid WSI diagnois')
     parser.add_argument("--batch_size",      type=int,   default=24,      help="batch size")
-    parser.add_argument('--device_id',       type=str,   default="5",     help='which device')
-    parser.add_argument('--test_num',        type=int,   default=1024,    help='which device')
+    parser.add_argument('--device_id',       type=str,   default="2",     help='which device')
+    parser.add_argument('--test_num',        type=int,   default=128,    help='which device')
     # model setting
     parser.add_argument("--class_num",       type=int,   default=3)
     parser.add_argument("--input_fea_num",   type=int,   default=4096)
