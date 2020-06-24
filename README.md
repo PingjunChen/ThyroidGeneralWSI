@@ -1,2 +1,2 @@
-Frozen Thyroid Whole Slide Image Classification
+Thyroid Nodule Frozen Section Whole Slide Image Classification
 ----------------
